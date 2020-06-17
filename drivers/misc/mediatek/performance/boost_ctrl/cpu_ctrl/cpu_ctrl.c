@@ -117,7 +117,7 @@ int update_userlimit_cpu_freq(int kicker, int num_cluster
 			return -EIO;
 	}
 
-	strncat(msg, msg1, LOG_BUF_SIZE);
+	strncat(msg, msg1, LOG_BUF_SIZE-1);
 	if (log_enable)
 		pr_debug("%s", msg);
 
