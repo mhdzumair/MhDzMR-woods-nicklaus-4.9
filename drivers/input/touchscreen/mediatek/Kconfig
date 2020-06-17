@@ -11,6 +11,8 @@ menuconfig INPUT_TOUCHSCREEN
 
 if INPUT_TOUCHSCREEN
 
+source "drivers/input/touchscreen/mediatek/synaptics_dsx/Kconfig"
+
 config TOUCHSCREEN_MTK
 	bool "MediaTek Touch Panel Driver"
 	help

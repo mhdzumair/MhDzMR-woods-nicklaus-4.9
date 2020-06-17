@@ -272,6 +272,7 @@ endmenu  # Security
 
 menu "Other Peripherals"
 
+source "drivers/misc/mediatek/wind_device_info/Kconfig"
 source "drivers/misc/mediatek/accdet/Kconfig"
 source "drivers/misc/mediatek/ice_debug/Kconfig"
 source "drivers/misc/mediatek/log_store/Kconfig"

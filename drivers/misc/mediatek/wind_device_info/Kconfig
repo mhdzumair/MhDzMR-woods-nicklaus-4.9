@@ -1,0 +1,5 @@
+config WIND_DEVICE_INFO
+	bool "CONFIG_WIND_DEVICE_INFO"
+	default n
+	help
+		Select y or n

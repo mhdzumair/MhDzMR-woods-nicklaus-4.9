@@ -61,6 +61,7 @@ obj-$(CONFIG_USB_MTK_HDRC) += usb20/
 obj-$(CONFIG_MTK_ECCCI_C2K) += c2k_usb/
 obj-$(CONFIG_MTK_LEDS)	+= leds/
 obj-$(CONFIG_MTK_BOOT) += boot/
+obj-$(CONFIG_WIND_DEVICE_INFO) += wind_device_info/
 obj-$(CONFIG_MTK_BOOT_REASON) += boot_reason/
 obj-$(CONFIG_MTK_CHIP) += chip/
 obj-$(CONFIG_MTK_SELINUX_AEE_WARNING)	+= selinux_warning/
@@ -166,4 +167,3 @@ obj-$(CONFIG_MTK_BTCVSD) += btcvsd/
 
 #io boost
 obj-y += io_boost/
-
