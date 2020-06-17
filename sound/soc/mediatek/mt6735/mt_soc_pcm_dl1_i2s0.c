@@ -76,10 +76,10 @@ static int mtk_afe_i2s0_probe(struct snd_soc_platform *platform);
 static int mi2s0_sidegen_control;
 static int mi2s0_hdoutput_control;
 static int mi2s0_extcodec_echoref_control;
-static const char const *i2s0_SIDEGEN[] = {
+static const char *i2s0_SIDEGEN[] = {
 	"Off", "On8000", "On16000", "On32000", "On44100", "On48000", "On96000", "On192000"};
-static const char const *i2s0_HD_output[] = {"Off", "On"};
-static const char const *i2s0_ExtCodec_EchoRef[] = {"Off", "MD1", "MD3"};
+static const char *i2s0_HD_output[] = {"Off", "On"};
+static const char *i2s0_ExtCodec_EchoRef[] = {"Off", "MD1", "MD3"};
 
 static const struct soc_enum Audio_i2s0_Enum[] = {
 	SOC_ENUM_SINGLE_EXT(ARRAY_SIZE(i2s0_SIDEGEN), i2s0_SIDEGEN),
