@@ -1257,6 +1257,7 @@ static int acc_bind_config(struct usb_configuration *c)
 
 	return usb_add_function(c, &dev->function);
 }
+EXPORT_SYMBOL_GPL(acc_bind_config);
 #endif
 
 static int acc_setup(void)

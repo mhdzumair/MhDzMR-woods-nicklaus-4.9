@@ -2120,6 +2120,7 @@ static int mtp_bind_config(struct usb_configuration *c,
 
 	return usb_add_function(c, &dev->function);
 }
+EXPORT_SYMBOL_GPL(mtp_bind_config);
 #endif
 
 static int __mtp_setup(struct mtp_instance *fi_mtp)
@@ -2177,6 +2178,7 @@ static int mtp_setup(void)
 {
 	return __mtp_setup(NULL);
 }
+EXPORT_SYMBOL_GPL(mtp_setup);
 #endif
 
 static int mtp_setup_configfs(struct mtp_instance *fi_mtp)
