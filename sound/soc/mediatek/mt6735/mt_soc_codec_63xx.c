@@ -56,7 +56,7 @@
 #include <sound/core.h>
 #include <sound/pcm.h>
 #include <sound/soc.h>
-#if !defined(CONFIG_MTK_LEGACY)
+#if (!defined(CONFIG_MTK_LEGACY)) & (!defined(CONFIG_MTK_LEGACY_EXTSPK))
 #include <linux/gpio.h>
 #include <linux/pinctrl/consumer.h>
 #else
@@ -105,6 +105,8 @@
 #define GPIO_AUDIO_SEL_M_GPIO   GPIO_MODE_00
 
 /* #define AW8736_MODE_CTRL // AW8736 PA output power mode control */
+
+#define AW8737_MODE_CTRL // AW8737 PA output power mode control */
 
 /* static function declaration */
 static bool AudioPreAmp1_Sel(int Mul_Sel);
@@ -1970,12 +1972,35 @@ do { \
 } while (0)
 #endif
 
+#if defined(CONFIG_MTK_LEGACY_EXTSPK)
+#define AW8737_MODE3 /*0.8w*/ \
+do { \
+	mt_set_gpio_out(pin_extspkamp, GPIO_OUT_ONE); \
+	udelay(GAP); \
+	mt_set_gpio_out(pin_extspkamp, GPIO_OUT_ZERO); \
+	udelay(GAP); \
+	mt_set_gpio_out(pin_extspkamp, GPIO_OUT_ONE); \
+	udelay(GAP); \
+	mt_set_gpio_out(pin_extspkamp, GPIO_OUT_ZERO); \
+	udelay(GAP); \
+	mt_set_gpio_out(pin_extspkamp, GPIO_OUT_ONE); \
+} while (0)
+#define AW8737_MODE2 /*1.0w*/ \
+do { \
+	mt_set_gpio_out(pin_extspkamp, GPIO_OUT_ONE); \
+	udelay(GAP); \
+	mt_set_gpio_out(pin_extspkamp, GPIO_OUT_ZERO); \
+	udelay(GAP); \
+	mt_set_gpio_out(pin_extspkamp, GPIO_OUT_ONE); \
+} while (0)
+#endif
+
 #define NULL_PIN_DEFINITION    (-1)
 static void Ext_Speaker_Amp_Change(bool enable)
 {
 #define SPK_WARM_UP_TIME        (25)	/* unit is ms */
 #ifndef CONFIG_FPGA_EARLY_PORTING
-#if defined(CONFIG_MTK_LEGACY)
+#if defined(CONFIG_MTK_LEGACY) || defined(CONFIG_MTK_LEGACY_EXTSPK)
 	int ret;
 
 	ret = GetGPIO_Info(5, &pin_extspkamp, &pin_mode_extspkamp);
@@ -1987,7 +2012,7 @@ static void Ext_Speaker_Amp_Change(bool enable)
 	if (enable) {
 		pr_debug("Ext_Speaker_Amp_Change ON+\n");
 #ifndef CONFIG_MTK_SPEAKER
-#if defined(CONFIG_MTK_LEGACY)
+#if defined(CONFIG_MTK_LEGACY) || defined(CONFIG_MTK_LEGACY_EXTSPK)
 
 		ret = GetGPIO_Info(10, &pin_extspkamp_2, &pin_mode_extspkamp_2);
 		pr_debug("Ext_Speaker_Amp_Change ON set GPIO\n");
@@ -2008,23 +2033,29 @@ static void Ext_Speaker_Amp_Change(bool enable)
 
 		/*udelay(1000);*/
 		usleep_range(1*1000, 20*1000);
-#if defined(CONFIG_MTK_LEGACY)
+#if defined(CONFIG_MTK_LEGACY) || defined(CONFIG_MTK_LEGACY_EXTSPK)
 		mt_set_gpio_dir(pin_extspkamp, GPIO_DIR_OUT);	/* output */
 		if (pin_extspkamp_2 != NULL_PIN_DEFINITION)
 			mt_set_gpio_dir(pin_extspkamp_2, GPIO_DIR_OUT);	/* output */
 
-#ifdef AW8736_MODE_CTRL
+#if defined(AW8736_MODE_CTRL)
 		AW8736_MODE3;
+#elif defined(AW8737_MODE_CTRL)
+		AW8737_MODE2;
 #else
 		mt_set_gpio_out(pin_extspkamp, GPIO_OUT_ONE);	/* high enable */
-#endif /*AW8736_MODE_CTRL*/
+#endif /*AW8737_MODE_CTRL*/
 		if (pin_extspkamp_2 != NULL_PIN_DEFINITION)
 			mt_set_gpio_out(pin_extspkamp_2, GPIO_OUT_ONE);	/* high enable */
 #else
 		AudDrv_GPIO_EXTAMP_Select(true);
 		AudDrv_GPIO_EXTAMP2_Select(true);
+
+#ifdef AW8737_MODE_CTRL
+    //ext amp for Z168 ---sunsiyuan@wind-mobi.com add at 20161109 end
+    msleep(SPK_WARM_UP_TIME);
+#endif
 #endif /*CONFIG_MTK_LEGACY*/
-		msleep(SPK_WARM_UP_TIME);
 #endif
 		if (strncmp("gobo", CONFIG_ARCH_MTK_PROJECT, 4) == 0) {/* for gobo y33 */
 			mt_set_gpio_mode(GPIO_AUDIO_SEL, GPIO_AUDIO_SEL_M_GPIO);
@@ -2044,7 +2075,7 @@ static void Ext_Speaker_Amp_Change(bool enable)
 	} else {
 		pr_debug("Ext_Speaker_Amp_Change OFF+\n");
 #ifndef CONFIG_MTK_SPEAKER
-#if defined(CONFIG_MTK_LEGACY)
+#if defined(CONFIG_MTK_LEGACY) || defined(CONFIG_MTK_LEGACY_EXTSPK)
 		ret = GetGPIO_Info(10, &pin_extspkamp_2, &pin_mode_extspkamp_2);
 		/* mt_set_gpio_mode(pin_extspkamp, GPIO_MODE_00); //GPIO117: DPI_D3, mode 0 */
 		mt_set_gpio_dir(pin_extspkamp, GPIO_DIR_OUT);	/* output */

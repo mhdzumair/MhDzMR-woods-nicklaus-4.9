@@ -218,3 +218,9 @@ config MT_SND_SOC_6797
 	  Must enable this to use medatek audio driver.
 	  The default value is y for MT6797.
 	  It's recommended no to change this.
+
+config MTK_LEGACY_EXTSPK
+	bool "MTK_LEGACY_EXTSPK"
+	default n
+	help
+	  If you say Y, enable MTK_LEGACY_EXTSPK
