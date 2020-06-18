@@ -17,6 +17,9 @@
 #include "inc/aal_control.h"
 struct alsps_context *alsps_context_obj /* = NULL*/;
 struct platform_device *pltfm_dev;
+#ifdef CONFIG_WIND_DEVICE_INFO
+	extern char *g_psensor_name;
+#endif
 int last_als_report_data = -1;
 
 /* AAL default delay timer(nano seconds)*/
@@ -751,6 +754,9 @@ static int alsps_real_driver_init(void)
 				  alsps_init_list[i]->name);
 			err = alsps_init_list[i]->init();
 			if (err == 0) {
+#ifdef CONFIG_WIND_DEVICE_INFO
+				g_psensor_name = alsps_init_list[i]->name;
+#endif
 				pr_debug(" alsps real driver %s probe ok\n",
 					  alsps_init_list[i]->name);
 				break;

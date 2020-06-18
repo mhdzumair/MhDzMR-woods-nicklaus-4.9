@@ -242,7 +242,7 @@ firmware_class.path=/vendor/firmware";
 		};
 
 		apxgpt: apxgpt@10004000 {
-			compatible = "mediatek,APXGPT";
+			compatible = "mediatek,APXGPT", "mediatek,mt6735-apxgpt";
 			reg = <0x10004000 0x1000>;
 			interrupts = <GIC_SPI 152 IRQ_TYPE_LEVEL_LOW>;
 			clock-frequency = <13000000>;
@@ -621,6 +621,22 @@ firmware_class.path=/vendor/firmware";
 			interrupts = <GIC_SPI 118 IRQ_TYPE_LEVEL_LOW>;
 		};
 
+		btif_tx:btif_tx@11000780 {
+			compatible = "mediatek,btif_tx";
+			reg = <0x11000780 0x80>;
+			interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_LOW>;
+		};
+		btif_rx:btif_rx@11000800 {
+			compatible = "mediatek,btif_rx";
+			reg = <0x11000800 0x80>;
+			interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_LOW>;
+		};
+		btif:btif@1100c000 {
+			compatible = "mediatek,btif";
+			reg = <0x1100c000 0x1000>;
+			interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_LOW>;
+		};/* End of btif */
+
 		consys:consys@18070000 {
 			compatible = "mediatek,mt6735m-consys",
 						 "mediatek,mt6735-consys";
@@ -644,12 +660,36 @@ firmware_class.path=/vendor/firmware";
 		als: als {
 			compatible = "mediatek, als-eint";
 		};
-
-    sar: sar {
+		sar: sar {
 			compatible = "mediatek, sar-eint";
 		};
 
-    capsensor:cap_touch@0 {
+		gse_1: gse_1 {
+			compatible = "mediatek, gse_1-eint";
+			status = "disabled";
+		};
+		gse_2: gse_2 {
+			compatible = "mediatek, gse_2-eint";
+			status = "disabled";
+		};
+		gse_3: gse_3 {
+			compatible = "mediatek, gse_3-eint";
+			status = "disabled";
+		};
+		gse_4: gse_4 {
+			compatible = "mediatek, gse_4-eint";
+			status = "disabled";
+		};
+		fpc1145: fpc1145{
+			compatible = "mediatek, fpc1145-eint";
+			status = "disabled";
+		};
+		chr_stat: chr_stat{
+			compatible = "mediatek, chr_stat-eint";
+			status = "disabled";
+		};
+
+		capsensor:cap_touch@0 {
 			compatible = "mediatek,cap_touch";
 		};
 		m_captouch_pl@0 {
@@ -665,14 +705,17 @@ firmware_class.path=/vendor/firmware";
 			i2c_addr = <0x28 0 0 0>;
 		};
 
-    chr_stat: chr_stat{
-      compatible = "mediatek, chr_stat-eint";
-      status = "disabled";
-    };
-		gse_1: gse_1 {
-			compatible = "mediatek, gse_1-eint";
-			status = "disabled";
+		cust_boardid@1 {
+			compatible = "mediatek,bid";
+			pinctrl-names="bid_pin1","bid_pin2","bid_pin3","bid_pin4","bid_pin5";
+			pinctrl-0 = <&bid_pin_num1>;
+			pinctrl-1 = <&bid_pin_num2>;
+			pinctrl-2 = <&bid_pin_num3>;
+			pinctrl-3 = <&bid_pin_num4>;
+			pinctrl-4 = <&bid_pin_num5>;
+			status ="okay";
 		};
+
 		ext_buck_oc: ext_buck_oc {
 			compatible = "mediatek, ext_buck_oc-eint";
 			status = "disabled";
@@ -682,9 +725,15 @@ firmware_class.path=/vendor/firmware";
 		};
 
 		dsi_te: dsi_te {
-			compatible = "mediatek, DSI_TE_1-eint";
+			compatible = "mediatek, DSI_TE_1-eint", "mediatek, dsi_te_1-eint";
 			status = "disabled";
 		};
+
+		nfc_clk_req: nfc_clk_req{
+			compatible = "mediatek, nfc_clk_req";
+			status = "disabled";
+		};
+
 	};
 
 	bus: bus {
@@ -868,7 +917,7 @@ firmware_class.path=/vendor/firmware";
 		};
 
 		sys_cirq: sys_cirq@10204000 {
-			compatible = "mediatek,sys_cirq";
+			compatible = "mediatek,sys_cirq", "mediatek,mt6735-sys_cirq";
 			reg = <0x10204000 0x1000>;
 			interrupts = <GIC_SPI 231 IRQ_TYPE_LEVEL_LOW>;
 			mediatek,cirq_num = <159>;
@@ -1133,7 +1182,7 @@ firmware_class.path=/vendor/firmware";
 		};
 
 		PWM@0x11006000 {
-			compatible = "mediatek,pwm";
+			compatible = "mediatek,pwm", "mediatek,PWM";
 			reg = <0x11006000 0x1000>;
 			interrupts = <0 77 0x8>;
 		};
@@ -1207,12 +1256,21 @@ firmware_class.path=/vendor/firmware";
 		};
 
 		touch: touch@ {
-			compatible = "mediatek,touch";
+			compatible = "mediatek,touch",
+					"mediatek,mt6735-touch",
+						"mediatek,mt6735m-touch";
 			vtouch-supply = <&mt_pmic_vgp1_ldo_reg>;
 		};
 
+		otg_iddig: otg_iddig@ {
+			compatible = "mediatek,usb_iddig_eint";
+		};
+
+
 		accdet: accdet@ {
-			compatible = "mediatek,pmic-accdet";
+			compatible = "mediatek,pmic-accdet",
+					"mediatek,mt6735-accdet",
+						"mediatek,mt6735m-accdet";
 		};
 
 		THERM_CTRL@0x1100B000 {
@@ -1225,6 +1283,18 @@ firmware_class.path=/vendor/firmware";
 			compatible = "mediatek,ptp_fsm_v1";
 			reg = <0x1100b000 0x1000>;
 			interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_LOW>;
+		};
+
+		AP_DMA_BTIF_TX@0x11000780 {
+			compatible = "mediatek,AP_DMA_BTIF_TX";
+			reg = <0x11000780 0x80>;
+			interrupts = <0 111 0x8>;
+		};
+
+		AP_DMA_BTIF_RX@0x11000800 {
+			compatible = "mediatek,AP_DMA_BTIF_RX";
+			reg = <0x11000800 0x80>;
+			interrupts = <0 112 0x8>;
 		};
 
 		btif@0x1100C000 {
